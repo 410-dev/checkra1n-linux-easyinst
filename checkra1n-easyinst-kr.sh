@@ -6,26 +6,36 @@ if [[ "$EUID" -ne 0 ]]; then
 else
 	echo "Superuser 권한이 부여되어있습니다."
 fi
+echo "라이브 이미지이시면 live 를 입력해 주세요. 아닐경우 엔터를 눌러주세요."
+read isLive
+if [[ "$isLive" == "live" ]]; then
+	echo "라이브모드로 셋팅되었습니다."
+fi
 echo "[1/6] 명령 아웃풋을 지정중입니다..."
 OUTPUTD="$HOME/CheckRa1nEasyInstLog.txt"
 touch "$OUTPUTD"
 echo "[2/6] APT 저장소에 CheckRa1n 의 저장소를 추가중입니다..."
-sudo echo "deb https://assets.checkra.in/debian /" >> /etc/apt/sources.list
+echo "deb https://assets.checkra.in/debian /" | sudo tee -a /etc/apt/sources.list
 echo "[3/6] GPG 키를 받아오는중입니다..."
-sudo apt-key adv --fetch-keys https://assets.checkra.in/debian/archive.key >> "$OUTPUTD"
+sudo apt-key adv --fetch-keys https://assets.checkra.in/debian/archive.key 2>> "$OUTPUTD"
 echo "[4/6] APT 저장소 정보들을 업데이트하는 중입니다..."
-sudo apt update >> "$OUTPUTD"
+sudo apt update 2>> "$OUTPUTD"
 echo "[5/6] CheckRa1n 과 의존 패키지를 내려받는 중입니다..."
-sudo apt-get install checkra1n -y >> "$OUTPUTD"
+sudo apt-get install checkra1n -y 2>> "$OUTPUTD"
 echo "[6/6] 바로가기를 바탕화면에 생성중입니다..."
 DESKT=""
-if [[ -d "$HOME/바탕화면" ]]; then
-	DESKT="$HOME/바탕화면"
+if [[ "$isLive" == "live" ]]; then
+	DESKT="/home/ubuntu/Desktop"
 else
-	DESKT="$HOME/Desktop"
+	if [[ -d "$HOME/바탕화면" ]]; then
+		DESKT="$HOME/바탕화면"
+	else
+		DESKT="$HOME/Desktop"
+	fi
 fi
 echo "sudo checkra1n" > "$DESKT/CheckRa1n.sh"
 chmod +x "$DESKT/CheckRa1n.sh"
+sudo chown root:root "$DESK/CheckRa1n.sh"
 echo "설치 과정이 완료되었습니다. 지금 바로 CheckRa1n을 실행하시겠습니까? (y/n)"
 read booleand
 if [[ "$booleand" == "Y" ]] || [[ "$booleand" == "y" ]]; then
