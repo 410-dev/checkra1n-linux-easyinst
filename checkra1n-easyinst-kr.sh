@@ -15,7 +15,10 @@ echo "[1/6] 명령 아웃풋을 지정중입니다..."
 OUTPUTD="$HOME/CheckRa1nEasyInstLog.txt"
 touch "$OUTPUTD"
 echo "[2/6] APT 저장소에 CheckRa1n 의 저장소를 추가중입니다..."
-echo "deb https://assets.checkra.in/debian /" | sudo tee -a /etc/apt/sources.list
+repoPresent="$(cat /etc/apt/sources.list | grep "assets.checkra.in/debian")"
+if [[ -z "$repoPresent" ]]; then
+	echo "deb https://assets.checkra.in/debian /" | sudo tee -a /etc/apt/sources.list
+fi
 echo "[3/6] GPG 키를 받아오는중입니다..."
 sudo apt-key adv --fetch-keys https://assets.checkra.in/debian/archive.key 2>> "$OUTPUTD"
 echo "[4/6] APT 저장소 정보들을 업데이트하는 중입니다..."
