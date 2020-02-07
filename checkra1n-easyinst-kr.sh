@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Script by 410"
 echo "Written in Nano."
-echo "스크립트 버전: 17.30-20.2.7"
+echo "스크립트 버전: 17.51-20.2.7"
 if [[ "$EUID" -ne 0 ]]; then
 	echo "권한이 부족합니다. 권한 상승을 위해 비밀번호를 입력해 주세요."
 	echo "비밀번호는 외부로 전송되지 않습니다."
@@ -19,7 +19,7 @@ if [[ -z "$repoPresent" ]]; then
 	#echo "deb https://assets.checkra.in/debian /" | sudo tee -a /etc/apt/sources.list
 fi
 echo "[3/5] GPG 키를 받아오는중입니다..."
-sudo apt-key -qq adv --fetch-keys https://assets.checkra.in/debian/archive.key 2>> "$OUTPUTD"
+sudo apt-key adv --fetch-keys https://assets.checkra.in/debian/archive.key 2>> "$OUTPUTD"
 echo "[4/5] APT 저장소 정보들을 업데이트하는 중입니다..."
 sudo apt -qq update 2>> "$OUTPUTD"
 echo "[5/5] CheckRa1n 과 의존 패키지를 내려받는 중입니다..."
